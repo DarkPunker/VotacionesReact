@@ -2,10 +2,18 @@ import { types } from "../types/types";
 
 const initialState = {
   users: [{
-    idusuario: 0,
-    nombre_usuario: '',
-    contrasena: '',
-    estado_usuario: '',
+    rol: {
+      descripcion_rol: "",
+      estado_rol: "",
+      idrol: 0,
+      nombre_rol: "",
+    },
+    user: {
+      idusuario: 0,
+      nombre_usuario: '',
+      contrasena: '',
+      estado_usuario: '',
+    }
   }]
 }
 

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { requirementLoading, positionLoading, onSaveAnnouncement } from '../../actions/positionAndRequirement';
 import { electionLoading } from '../../actions/electionAndAnnouncement';
 import { useForm } from "../../hooks/useForm";
+import Swal from 'sweetalert2';
 
 export const AnnouncementPage = () => {
 
@@ -29,12 +30,74 @@ export const AnnouncementPage = () => {
 
   const [formRegisterValues, handleRegisterInputChange] = useForm({
     ...checks(),
-
+    nombre_convocatoria: '',
+    fecha_inicio: '',
+    fecha_fin: '',
+    cargo: '',
+    eleccion: ''
   });
 
   const {
-
+    nombre_convocatoria,
+    fecha_inicio,
+    fecha_fin,
+    cargo,
+    eleccion
   } = formRegisterValues;
+
+  const cargos = () => {
+    const aux = {}
+    for (let i = 0; i < positions.length; i++) {
+      aux[positions[i].idcargo] = `${positions[i].nombre_cargo}`
+
+    }
+    return aux;
+  }
+
+  const selectposition = () => {
+    Swal.fire({
+      title: 'Seleccionar un Cargo',
+      input: 'select',
+      inputOptions: {
+        'Cargos': cargos()
+      },
+      inputPlaceholder: 'Seleccione un Cargo',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      showLoaderOnConfirm: true,
+      preConfirm: (value) => {
+        return value;
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    });
+  }
+
+  const elects = () => {
+    const aux = {}
+    for (let i = 0; i < elections.length; i++) {
+      aux[elections[i].ideleccion] = `${elections[i].nombre_eleccion}`
+
+    }
+    return aux;
+  }
+
+  const selectelec = () => {
+    Swal.fire({
+      title: 'Seleccionar una Eleccion',
+      input: 'select',
+      inputOptions: {
+        'elecciones': elects()
+      },
+      inputPlaceholder: 'Seleccione una Eleccion',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      showLoaderOnConfirm: true,
+      preConfirm: (value) => {
+        return value;
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    });
+  }
 
   const saveAnnouncement = (e) => {
     e.preventDefault();
@@ -57,21 +120,37 @@ export const AnnouncementPage = () => {
                     <label for="" className="form-label">Nombre de la Convocatoria</label>
                     <label for="" className="redcolor"> *</label>
                   </div>
-                  <input type="text" className="form-control" id="nombreEleccion" placeholder="Nombre" required />
+                  <input type="text"
+                    className="form-control"
+                    placeholder="Nombre"
+                    name="nombre_convocatoria"
+                    value={nombre_convocatoria}
+                    onChange={handleRegisterInputChange}
+                    required />
                 </div>
                 <div className="mb-3">
                   <div className="colum">
                     <label for="" className="form-label">Fecha de Inicio</label>
                     <label for="" className="redcolor"> *</label>
                   </div>
-                  <input type="date" className="form-control" id="fechaInicio" required />
+                  <input type="date"
+                    className="form-control"
+                    name="fecha_inicio"
+                    value={fecha_inicio}
+                    onChange={handleRegisterInputChange}
+                    required />
                 </div>
                 <div className="mb-3">
                   <div className="colum">
                     <label for="" className="form-label">Fecha Fin</label>
                     <label for="" className="redcolor"> *</label>
                   </div>
-                  <input type="date" className="form-control" id="fechaFin" required />
+                  <input type="date"
+                    className="form-control"
+                    name="fecha_fin"
+                    value={fecha_fin}
+                    onChange={handleRegisterInputChange} 
+                    required />
                 </div>
                 <div className="mb-3">
                   <div className="colum">
@@ -79,13 +158,11 @@ export const AnnouncementPage = () => {
                     <label for="" className="redcolor"> *</label>
                   </div>
                   <div class="input-group mb-3">
-                    <select class="container-lg custom-select" id="inputGroupSelect01">
-                      {
-                        positions.length > 0 && positions.map(item => {
-                          return <option value={item.idcargo}>{item.nombre_cargo}</option>
-                        })
-                      }
-                    </select>
+                    <button type="button"
+                      class="btn btn-info"
+                      value={eleccion}
+                      onChange={handleRegisterInputChange}
+                      onClick={() => selectposition()}>Seleccionar Cargo</button>
                   </div>
                 </div>
                 <div className="mb-3">
@@ -94,13 +171,7 @@ export const AnnouncementPage = () => {
                     <label for="" className="redcolor"> *</label>
                   </div>
                   <div class="input-group mb-3">
-                    <select class="container-lg custom-select" id="inputGroupSelect01">
-                      {
-                        elections.length > 0 && elections.map(item =>{
-                          return <option value={item.ideleccion}>{item.nombre_eleccion}</option>
-                        })
-                      }
-                    </select>
+                    <button type="button" class="btn btn-info" onClick={() => selectelec()}>Seleccionar eleccion</button>
                   </div>
                 </div>
                 <div className="mb-3">

@@ -6,6 +6,8 @@ export const types = {
     
     loadedUsers: '[Users] users loaded',
 
+    loadedRols: '[Rols] rols loaded',
+
     addNewRequirement: '[Requirement] add requiremente',
     updateRequirement: '[Requirement] requirements update',
     loadedRequirement: '[Requirement] requirements loaded',

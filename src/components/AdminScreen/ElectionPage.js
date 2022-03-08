@@ -1,19 +1,33 @@
-import React from 'react';
-import { useDispatch } from 'react-redux'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import Swal from 'sweetalert2';
-import { createElection } from '../../actions/electionAndAnnouncement';
+import { createElection, electionLoadingbyid, onChangeElection } from '../../actions/electionAndAnnouncement';
 import { useForm } from "../../hooks/useForm";
-
+import { useParams } from "react-router-dom";
 import '.././css/colortext.css';
 
 export const ElectionPage = () => {
 
+    let { id } = useParams();
+
     const dispatch = useDispatch();
 
+    const { elections } = useSelector(state => state?.elections);
+
+    const electionselection = () =>{
+        for (let index = 0; index < elections.length; index++) {
+            if(elections[index].ideleccion == id){
+                return elections[index];
+            }
+        }
+    }
+
+    console.log(electionselection());
+        
     const [formElectionValues, handleElectionInputChange] = useForm({
-        Electionname: '',
-        DateInit: '',
-        DateEnd: ''
+        Electionname: electionselection()?.nombre_eleccion,
+        DateInit: electionselection()?.fecha_inicio,
+        DateEnd: electionselection()?.fecha_fin
     });
 
     const {
@@ -26,7 +40,14 @@ export const ElectionPage = () => {
         e.preventDefault();
         if (DateEnd < DateInit) {
             Swal.fire('Error', "La Fecha Fin debe ser mayor a la Fecha De Inicio", 'error');
-         } else {
+        } else if(id != undefined){
+            dispatch(onChangeElection(
+                id,
+                Electionname,
+                DateInit,
+                DateEnd
+            ));
+        }else{
             dispatch(createElection(
                 Electionname,
                 DateInit,
@@ -40,7 +61,7 @@ export const ElectionPage = () => {
                 <div className="contenido">
                     <div className="card">
                         <div class="card-header">
-                            Creacion de Eleccion
+                            Gestionar Eleccion
                         </div>
                         <div class="card-body">
                             <form action="" method="" onSubmit={handleElection}>

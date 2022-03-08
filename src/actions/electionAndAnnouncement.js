@@ -23,6 +23,25 @@ export const createElection = (nombre_eleccion, fecha_inicio, fecha_fin) => {
     }
 }
 
+export const onChangeElection = (ideleccion, nombre_eleccion, fecha_inicio, fecha_fin) =>{
+    return async () =>{
+      const resp = await fetchSinToken('eleccion/changeelection',{ideleccion, nombre_eleccion, fecha_inicio, fecha_fin},'PUT');
+      const body = await resp.json();
+      if (resp.ok && body.error != undefined) {
+        Swal.fire('Error', body.error, 'error');
+    } else {
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: body.message,
+            showConfirmButton: false,
+            timer: 2000
+        });
+    }
+    }
+  }
+
+
 export const electionLoading = () => {
     return async (dispatch) => {
         const resp = await fetchSinToken('eleccion/elections');

@@ -19,8 +19,10 @@ export const authReducer = (state = initialState, action) => {
             }
         case types.islogged:
             const token = localStorage.getItem("logged")
+            const rol = localStorage.getItem("rol")
             return {
-                logged: token || false
+                logged: token || false,
+                rol: rol || null
             }
         default:
             return state;

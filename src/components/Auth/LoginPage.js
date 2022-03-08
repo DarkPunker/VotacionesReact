@@ -24,25 +24,6 @@ export const LoginPage = () => {
         dispatch(login(Username, Password));
     }
 
-    /*const navigate = useNavigate();
-    const { dispatch } = useContext(AuthContext);
-
-    const handleLogin = () => {
-        const action = {
-            type: types.login,
-            payload: {
-                name: 'useradmin'
-            }
-        }
-
-        dispatch(action);
-
-        const lastPath = '/adminHome';
-        navigate(lastPath, {
-            replace: true
-        });
-    }*/
-
     return (
         <>
             <div className="wrapper">
@@ -92,17 +73,6 @@ export const LoginPage = () => {
                     </div>
                 </div>
             </div>
-            {/* <div classNameName="container mt-5">
-                <h1>Login</h1>
-                <hr />
-
-                <button
-                    classNameName="btn btn-primary"
-                    onClick={handleLogin}
-                >
-                    Login
-                </button>
-            </div> */}
         </>
     );
 }

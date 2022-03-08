@@ -7,14 +7,14 @@ export const login = (Username, Password) => {
     return async (dispath) => {
         const resp = await fetchSinToken('usuario/login', { Username, Password }, 'POST');
         const body = await resp.json();
-
         if (resp.ok && body.error != undefined) {
             Swal.fire('Error', body.error, 'error');
         } else {
-            localStorage.setItem("name", body.nombre_usuario)
+            localStorage.setItem("name", body.user.nombre_usuario)
             localStorage.setItem("logged", true)
+            localStorage.setItem("rol", body.rol.nombre_rol)
             dispath(authlogin({
-                name: body.nombre_usuario
+                name: body.user.nombre_usuario
             }))
         }
     }

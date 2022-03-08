@@ -6,6 +6,7 @@ import { electionReducer } from '../reducers/electionReducer';
 import { positionReducer } from '../reducers/positionReducer';
 
 import { requirementReducer } from '../reducers/requirementReducer';
+import { rolReducer } from '../reducers/rolRuducer';
 import { userReducer } from '../reducers/userReducer';
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
@@ -15,7 +16,8 @@ const reducers = combineReducers({
     users: userReducer,
     requirements: requirementReducer,
     positions: positionReducer,
-    elections: electionReducer
+    elections: electionReducer,
+    rols: rolReducer
 })
 
 export const store = createStore(
