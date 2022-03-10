@@ -65,11 +65,11 @@ export const AdminNav = () => {
       case "invitado":
         return <>
           {esquema("Informacion",
-            [{ nombreruta: '', letrero: 'Elecciones' },
-            { nombreruta: '', letrero: 'Candidatos' }])}
+            [{ nombreruta: 'elections', letrero: 'Elecciones' },
+            ])}
           {esquema("Votaciones",
-            [{ nombreruta: '', letrero: 'Votacion' },
-            { nombreruta: '', letrero: 'Candidatos' }])}
+            [{ nombreruta: 'votes', letrero: 'Votaciones' },
+            { nombreruta: 'maganeannouncement', letrero: 'Candidatos' }])}
         </>
       case "administrador":
         return <>
@@ -77,9 +77,10 @@ export const AdminNav = () => {
             [{ nombreruta: 'adminHome', letrero: 'Usuarios' },
             { nombreruta: 'role', letrero: 'Roles' }])}
           {esquema("Gestionar Eleccion",
-            [{ nombreruta: 'elections', letrero: 'Elecciones' }])}
+            [{ nombreruta: 'elections', letrero: 'Elecciones' },
+            { nombreruta: 'votes', letrero: 'Votaciones' }])}
           {esquema("Gestionar Convocatoria",
-            [{ nombreruta: 'announcement', letrero: 'Crear Convocatoria' },
+            [{ nombreruta: 'maganeannouncement', letrero: 'Convocatorias' },
             { nombreruta: 'position', letrero: 'Cargos' },
             { nombreruta: 'requirement', letrero: 'Requisitos' }])}
         </>

@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { requirementLoading, positionLoading, onSaveAnnouncement } from '../../actions/positionAndRequirement';
-import { electionLoading } from '../../actions/electionAndAnnouncement';
+import { requirementLoading, positionLoading } from '../../actions/positionAndRequirement';
+import { electionLoading, onSaveAnnouncement } from '../../actions/electionAndAnnouncement';
 import { useForm } from "../../hooks/useForm";
 import Swal from 'sweetalert2';
 
@@ -12,6 +12,8 @@ export const AnnouncementPage = () => {
   const { requirements } = useSelector(state => state?.requirements);
   const { positions } = useSelector(state => state?.positions);
   const { elections } = useSelector(state => state?.elections);
+  const [req, setReq] = useState([]);
+
 
   useEffect(() => {
     dispatch(requirementLoading());
@@ -29,7 +31,7 @@ export const AnnouncementPage = () => {
   }
 
   const [formRegisterValues, handleRegisterInputChange] = useForm({
-    ...checks(),
+    req,
     nombre_convocatoria: '',
     fecha_inicio: '',
     fecha_fin: '',
@@ -45,64 +47,25 @@ export const AnnouncementPage = () => {
     eleccion
   } = formRegisterValues;
 
-  const cargos = () => {
-    const aux = {}
-    for (let i = 0; i < positions.length; i++) {
-      aux[positions[i].idcargo] = `${positions[i].nombre_cargo}`
-
-    }
-    return aux;
-  }
-
-  const selectposition = () => {
-    Swal.fire({
-      title: 'Seleccionar un Cargo',
-      input: 'select',
-      inputOptions: {
-        'Cargos': cargos()
-      },
-      inputPlaceholder: 'Seleccione un Cargo',
-      showCancelButton: true,
-      confirmButtonText: 'OK',
-      showLoaderOnConfirm: true,
-      preConfirm: (value) => {
-        return value;
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    });
-  }
-
-  const elects = () => {
-    const aux = {}
-    for (let i = 0; i < elections.length; i++) {
-      aux[elections[i].ideleccion] = `${elections[i].nombre_eleccion}`
-
-    }
-    return aux;
-  }
-
-  const selectelec = () => {
-    Swal.fire({
-      title: 'Seleccionar una Eleccion',
-      input: 'select',
-      inputOptions: {
-        'elecciones': elects()
-      },
-      inputPlaceholder: 'Seleccione una Eleccion',
-      showCancelButton: true,
-      confirmButtonText: 'OK',
-      showLoaderOnConfirm: true,
-      preConfirm: (value) => {
-        return value;
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    });
-  }
-
   const saveAnnouncement = (e) => {
     e.preventDefault();
     console.log(formRegisterValues);
-    //dispatch(onSaveAnnouncement(formRegisterValues))
+    dispatch(onSaveAnnouncement(nombre_convocatoria,fecha_inicio,fecha_fin,cargo,eleccion,req))
+  }
+
+  const onChageReq = (event) => {
+    const { target } = event
+    const index = req.findIndex(value => target.value === value)
+    let reqAux = req
+    //console.log(req, target.value, index)
+    if (index < 0 && target.checked) {
+      reqAux = [...req, target.value]
+    } else {
+      reqAux = reqAux.splice(index, 1)
+    }
+    setReq(reqAux)
+    console.log("reqAux", reqAux)
+    handleRegisterInputChange({ ...event, target: { name: target.name, value: reqAux } })
   }
 
   return (
@@ -149,7 +112,7 @@ export const AnnouncementPage = () => {
                     className="form-control"
                     name="fecha_fin"
                     value={fecha_fin}
-                    onChange={handleRegisterInputChange} 
+                    onChange={handleRegisterInputChange}
                     required />
                 </div>
                 <div className="mb-3">
@@ -158,11 +121,22 @@ export const AnnouncementPage = () => {
                     <label for="" className="redcolor"> *</label>
                   </div>
                   <div class="input-group mb-3">
-                    <button type="button"
-                      class="btn btn-info"
-                      value={eleccion}
-                      onChange={handleRegisterInputChange}
-                      onClick={() => selectposition()}>Seleccionar Cargo</button>
+                    <select class="form-select form-select-lg"
+                      id="inputGroupSelect01"
+                      name='cargo'
+                      value={cargo}
+                      onChange={handleRegisterInputChange}>
+                        <option
+                            value=""
+                          >Seleccionar Cargo</option>
+                      {
+                        positions.length > 0 && positions.map(item => {
+                          return <option
+                            value={item.idcargo}
+                          >{item.nombre_cargo}</option>
+                        })
+                      }
+                    </select>
                   </div>
                 </div>
                 <div className="mb-3">
@@ -171,7 +145,20 @@ export const AnnouncementPage = () => {
                     <label for="" className="redcolor"> *</label>
                   </div>
                   <div class="input-group mb-3">
-                    <button type="button" class="btn btn-info" onClick={() => selectelec()}>Seleccionar eleccion</button>
+                    <select class="form-select form-select-lg"
+                      id="inputGroupSelect02"
+                      name='eleccion'
+                      value={eleccion}
+                      onChange={handleRegisterInputChange}>
+                        <option
+                            value=""
+                          >Seleccionar Eleccion</option>
+                      {elections.length > 0 && elections.map(item => {
+                        return <option
+                          value={item.ideleccion}
+                        >{item.nombre_eleccion}</option>
+                      })}
+                    </select>
                   </div>
                 </div>
                 <div className="mb-3">
@@ -183,12 +170,13 @@ export const AnnouncementPage = () => {
                     {
                       requirements.length > 0 && requirements.map(item => {
                         return <>
-                          <input type="checkbox"
+                          <input
                             class="btn-check"
-                            name={"req" + item.idrequisito}
+                            type="checkbox"
                             id={item.idrequisito}
+                            name={"req"}
                             value={item.nombre_requisito}
-                            onChange={handleRegisterInputChange}
+                            onChange={onChageReq}
                             autocomplete="off" />
                           <label class="btn btn-outline-primary" for={item.idrequisito}>{item.nombre_requisito}</label>
                         </>

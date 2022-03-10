@@ -22,8 +22,6 @@ export const ElectionPage = () => {
         }
     }
 
-    console.log(electionselection());
-        
     const [formElectionValues, handleElectionInputChange] = useForm({
         Electionname: electionselection()?.nombre_eleccion,
         DateInit: electionselection()?.fecha_inicio,

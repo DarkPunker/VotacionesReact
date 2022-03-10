@@ -17,4 +17,8 @@ export const types = {
     loadedPosition: '[Position] position loaded',
 
     loadedElections: '[Elections] elections loaded',
+
+    loadedAnnouncements: '[Announcement] announcements loaded',
+
+    loadedPostulations: '[Postulation] postulations loaded',
 }

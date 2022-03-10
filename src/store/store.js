@@ -1,9 +1,11 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
+import { announcementReducer } from '../reducers/announcementReducer';
 
 import { authReducer } from '../reducers/authReducer';
 import { electionReducer } from '../reducers/electionReducer';
 import { positionReducer } from '../reducers/positionReducer';
+import { postulationReducer } from '../reducers/postulationReducer';
 
 import { requirementReducer } from '../reducers/requirementReducer';
 import { rolReducer } from '../reducers/rolRuducer';
@@ -17,7 +19,9 @@ const reducers = combineReducers({
     requirements: requirementReducer,
     positions: positionReducer,
     elections: electionReducer,
-    rols: rolReducer
+    rols: rolReducer,
+    announcements: announcementReducer,
+    postulations: postulationReducer
 })
 
 export const store = createStore(

@@ -8,6 +8,7 @@ export const useForm = (initialState = {}) => {
     }
 
     const handleInputChange= ({target})=>{
+        //console.log("TATG", target)
         setValues({
             ...values,
             [target.name]: target.value

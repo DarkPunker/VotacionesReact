@@ -101,8 +101,3 @@ const requirementsLoaded = (requirements) => ({
     payload: requirements
 })
 
-// export const onSaveAnnouncement = (data) => {
-//     return async () => {
-//         const resp = await fetchSinToken('convocatoria/createrannounament', { data }, 'POST');
-//     }
-// }
